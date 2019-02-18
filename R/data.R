@@ -5,7 +5,7 @@
 #'
 #' @source \url{https://archive.ics.uci.edu/ml/datasets/MONK's+Problems}
 #' @format A data frame with 124 rows and 8 columns:
-#' \describe{}
+#' \describe{
 #'   \item{label}{The class label}
 #'   \item{a1}{Attribute 1}
 #'   \item{a2}{Attribute 2}
@@ -24,7 +24,7 @@
 #'
 #' @source \url{https://archive.ics.uci.edu/ml/datasets/MONK's+Problems}
 #' @format A data frame with 432 rows and 8 columns:
-#' \describe{}
+#' \describe{
 #'   \item{label}{The class label}
 #'   \item{a1}{Attribute 1}
 #'   \item{a2}{Attribute 2}
