@@ -16,12 +16,14 @@ ID3 <- R6::R6Class("ID3",
   public = list(
 
     tree = NULL,
+    max_depth = NULL,
 
     initialize = function(name = "root") {
       self$tree <- data.tree::Node$new(name)
     },
 
-    train = function(features, labels) {
+    train = function(features, labels, max_depth = ncol(features)) {
+      self$max_depth <- max_depth
       feature_ranges <- list()
       for(i in 1:ncol(features)) {
         feature_ranges[[names(features)[i]]] <- unique(features[,i])
@@ -69,12 +71,21 @@ ID3 <- R6::R6Class("ID3",
       ig
     },
 
+    depth = function(node) {
+      curr_depth <- 0
+      while(!node$isRoot) {
+        node <- node$parent
+        curr_depth <- curr_depth + 1
+      }
+      curr_depth
+    },
+
     train_help = function(node, features, labels, feature_ranges) {
       if(length(unique(labels)) == 1) {
         # class labels are all the same, so classify!
         leaf <- node$AddChild(unique(labels))
         node$feature <- "class"
-      } else if(dim(features)[2] == 0) {
+      } else if(private$depth(node) >= self$max_depth) {
         # if no features left to split on, take mode of feature values
         leaf <- node$AddChild(names(which.max(table(labels))))
         node$feature <- "class"
