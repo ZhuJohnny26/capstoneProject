@@ -11,3 +11,7 @@ RoxygenNote: 6.1.1
 Imports:
     R6,
     data.tree
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
