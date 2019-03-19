@@ -1,3 +1,12 @@
+#intialization
+#first you need to import data but setwd first 
+#bCancer <- read.table("/insertyourDatapath/wdbc.txt" , header=false, sep = ",")
+#delete first 2 columns
+#bCancer[1:2] <- NULL
+#create test set called testMean
+#testMean <- bCancer [1:569,1:5]
+#then source and run the script
+#k_pts has the table of mean points
 bCancer <- read.table("D:\\New folder\\wdbc.txt" , header=FALSE, sep = ",")
 bCancer[1:2] <- NULL
 testMean <- bCancer [1:569,1:5]
@@ -33,9 +42,9 @@ pointMean <- function(data, means, column) {
     
   }
   if(k %% 2 == 0){  #if k is even gets rid of the first
-                    #mean to have even k means
+    #mean to have even k means
     mean_pts <- mean_pts[2:floor(k/2)] 
- 
+    
   }
   return(mean_pts)
 }
@@ -57,35 +66,30 @@ euclidean_dist <- function(k,unk) {
   return(distance)
 } 
 
-clust_1 <- data.frame()
-clust_2 <- data.frame()
-clust_3 <- data.frame()
+cluster <- rep(list(NULL), k)#creates a list of k clusters
 
 
 get_dist <- rep(0,3)
-for(i in 1:nrow(testMean)){
-  need_dist <- testMean[i, 1:5]
-  mean_pt1 <- k_pts[1, 1:5]
-  mean_pt2 <- k_pts[2, 1:5]
-  mean_pt3 <- k_pts[3, 1:5]
-  get_dist[1] <- euclidean_dist(mean_pt1, need_dist)
-  get_dist[2] <- euclidean_dist(mean_pt2, need_dist)
-  get_dist[3] <- euclidean_dist(mean_pt3, need_dist)
-  dist_1 <- as.numeric(as.character(get_dist[1]))
-  dist_2 <- as.numeric(as.character(get_dist[2]))
-  dist_3 <- as.numeric(as.character(get_dist[3]))
-  theMin <- min(unlist(get_dist))
-  if(isTRUE(all.equal(theMin, dist_1))){
-    enter1 <- testMean[i, 1:5]
-    clust_1 <- rbind(clust_1, enter1)
-  } else if(isTRUE(all.equal(theMin, dist_2))){
+for(i in 1:nrow(testMean)){ #goes through the data
+  minimum <- 10000
+  
+ 
+  for(j in 1:nrow(k_pts)){ #goes through the k means
     
-    enter2 <- testMean[i, 1:5]
-    clust_2 <- rbind(clust_2, enter2)
-  } else if(isTRUE(all.equal(theMin, dist_3))){
-    enter3 <- testMean[i, 1:5]
-    clust_3 <- rbind(clust_3, enter3)
+  need_dist <- testMean[i, 1:5]
+  mean_pt <- k_pts[j, 1:5]
+  get_dist <- euclidean_dist(mean_pt, need_dist)
+  dist_1 <- as.numeric(as.character(get_dist))
+  minimum <- as.numeric(minimum)
+  
+  if(dist_1 < minimum){#compares the distance between every k, the min is then put into minimum and is indexed
+    index <- j
+    minimum <- dist_1
+    }
   }
+
+  enter <- testMean[i, 1:5]#places the row of data into the k cluster with min distance
+  cluster[[index]] <- rbind(cluster[[index]], enter)
   
 }
 
